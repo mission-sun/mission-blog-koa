@@ -29,7 +29,7 @@ var server = http.createServer(app.callback());
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port, 'localhost', () => {
+server.listen(port, () => {
   let _path = path.relative('/data/orandea/', '/data/orandea/a/b');
   console.log('path', _path);
   console.log('server run in', chalk.red(`${config.host}:${config.port}`));

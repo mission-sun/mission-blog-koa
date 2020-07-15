@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'nodeDeployfe',
-    script: 'bin/www',
+    script: './bin/www',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     args: 'one two',
@@ -22,9 +22,9 @@ module.exports = {
       user : 'root-mission',
       host : '49.234.222.116',
       ref  : 'origin/master',
-      repo : 'https://github.com/mission-sun/mission-blog.git',
+      repo : 'https://github.com/mission-sun/mission-blog-koa.git',
       path : '/home/root-mission/blog/serve',
-      'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'npm install --registry=https://registry.npm.taobao.org && pm2 reload ecosystem.config.js --env production'
     }
   }
 };

@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'nodeDeployfe',
-    script: 'index.js',
+    script: 'bin/www',
 
     // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
     args: 'one two',
@@ -23,7 +23,7 @@ module.exports = {
       host : '49.234.222.116',
       ref  : 'origin/master',
       repo : 'https://github.com/mission-sun/mission-blog.git',
-      path : '/home/root-mission/blog/static',
+      path : '/home/root-mission/blog/serve',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
     }
   }

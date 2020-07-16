@@ -5,6 +5,10 @@
    url: "mongodb://49.234.222.116:27017/demo01",
    dbName: 'root-mission'
  }
+
+ const env = process.env.NODE_ENV;
+ console.log('env....', env, process.env.env);
+
  //2.连接数据库
  mongoose.connect(dbSetting.url,{useNewUrlParser:true},function (err) {
      if(err){
@@ -16,12 +20,19 @@
  //3.创建一个schema，规定集合内数据的结构和类型，创建规则，规则中不设置，不能插入成功；
  let blogSchema = new mongoose.Schema({
      title: String,
-     content: String
+     content: String,
+     time: String
  });
 
  let blogData = mongoose.model("blogData",blogSchema);
-//  var one = new blogData({title: 'one', content: '12121212'});
-//  one.save(function(err){
+
+ // 目前手动写博客
+//  var oneblog = new blogData(
+//    {title: '刘小铮早点回家了！！！', 
+//    content: '一个小女生，差不多就行了，工作是大家的，身体是自己的！ 赶紧回家了，小区门口有个思念你的人在等你了',
+//     time: (new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString()
+//   });
+//  oneblog.save(function(err){
 //    if(err) {
 //      console.log('err', err)
 //    }else {
@@ -87,7 +98,7 @@
         const promise = new Promise((reslove, reject) => {
           blogData.find({}, (err, docs) => {
             console.log('docs', docs);
-            reslove(docs);
+            reslove(process.env);
           })
         })
         return promise;

@@ -7,7 +7,7 @@
  }
 
  const env = process.env.NODE_ENV;
- console.log('env....', env, process.env.env);
+ console.log('env....', env, process.env.NODE_ENV);
 
  //2.连接数据库
  mongoose.connect(dbSetting.url,{useNewUrlParser:true},function (err) {
@@ -98,7 +98,7 @@
         const promise = new Promise((reslove, reject) => {
           blogData.find({}, (err, docs) => {
             console.log('docs', docs);
-            reslove(process.env);
+            reslove(docs);
           })
         })
         return promise;

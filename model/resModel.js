@@ -1,15 +1,16 @@
+// data 始终放对象，message 放文案 
 class BaseModel {
   constructor(data, meessage) {
-    if( typeof data == "string") {
-      this.meessage = data
-      data = null 
-      meessage = null
+    if (typeof data == "string") {
+      this.meessage = data;
+      data = null;
+      meessage = null;
     }
-    if( data) {
-      this.data = data
+    if (data) {
+      this.data = data;
     }
-    if(meessage) {
-      this.meessage = meessage
+    if (meessage) {
+      this.meessage = meessage;
     }
   }
 }
@@ -17,20 +18,19 @@ class BaseModel {
 class SuccessModel extends BaseModel {
   constructor(data, meessage) {
     // 继承
-    super(data, meessage)
-    this.errno  = 0
-  }  
+    super(data, meessage);
+    this.errno = 0;
+  }
 }
 
 class ErrorModel extends BaseModel {
   constructor(data, meessage) {
-    super(data, meessage)
-    this.errno = -1
+    super(data, meessage);
+    this.errno = -1;
   }
 }
 
-module.exports  = {
+module.exports = {
   SuccessModel,
-  ErrorModel
-}
-
+  ErrorModel,
+};

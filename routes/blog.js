@@ -4,6 +4,7 @@ router.prefix("/api/blog");
 // let exec = require ('../db/mongo');
 let exec = require('../db/mongose');
 
+const {SuccessModel, ErrorModel,}  = require("../model/resModel");
 
 router.get("/list", async function (ctx, next) {
   // const query = ctx.query;
@@ -30,9 +31,10 @@ router.get("/list", async function (ctx, next) {
   // })
 
   await exec.find().then(res => {
-    console.log('res.....', res);
-    ctx.body = res;
-  })
+    ctx.body = new SuccessModel(res);
+  }).catch(err => {
+    ctx.body = new ErrorModel(err);
+  }) 
   // console.log('getData', getData());
  
   // ctx.body = {
@@ -42,5 +44,23 @@ router.get("/list", async function (ctx, next) {
   //   viewCont: ctx.session.viewCount
   // };
 });
+
+router.post("/create", async function (ctx, next) {
+  console.log('create', ctx.request.body);
+  await exec.save(ctx.request.body).then(res => {
+    ctx.body = new SuccessModel(res);
+  }).catch(err => {
+    ctx.body = new ErrorModel(err);
+  }) 
+})
+
+router.post("/delete", async function (ctx, next) {
+  console.log('delete', ctx.request.body);
+  await exec.deleteOne(ctx.request.body).then(res => {
+    ctx.body = new SuccessModel(res);
+  }).catch(err => {
+    ctx.body = new ErrorModel(err);
+  }) 
+})
 
 module.exports = router;

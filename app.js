@@ -12,7 +12,7 @@ const path = require("path");
 
 const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
-const { REDIS_CONF } = require('./conf/db');
+// const { REDIS_CONF } = require('./conf/db');
 
 const index = require("./routes/index");
 const users = require("./routes/users");

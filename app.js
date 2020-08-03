@@ -12,7 +12,7 @@ const path = require("path");
 
 const session = require('koa-generic-session');
 const redisStore = require('koa-redis');
-// const { REDIS_CONF } = require('./conf/db');
+const dbSetting = require('./conf/db');
 
 const index = require("./routes/index");
 const users = require("./routes/users");
@@ -55,25 +55,27 @@ app.use(async (ctx, next) => {
 
 // redis  
 
-// app.keys = ['keys', 'keykeys'];
-// app.use(session({
-//    // 配置cookie
-//   cookie: {
-//     path: '/',
-//     httpOnly: true,
-//     maxAge: 24 * 60 * 60 * 1000
-//   },
-//   // 配置redis
-//   store: redisStore({
-//     all: `${ REDIS_CONF.host }:${ REDIS_CONF.port }`
-//   })
-// }));
+app.keys = ['keysone'];
+// session 注册后，我们才能在ctx.session 中获取到数据
+app.use(session({
+   // 配置cookie
+  cookie: {
+    path: '/',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000
+  },
+  // 配置redis
+  // store: redisStore()
+  store: redisStore({
+    all: `${dbSetting.host}:${dbSetting.port}`
+  })
+}));
 
 
 
 // routes
 app.use(index.routes(), index.allowedMethods());
-// app.use(users.routes(), users.allowedMethods());
+app.use(users.routes(), users.allowedMethods());
 app.use(blog.routes(), blog.allowedMethods());
 
 // error-handling

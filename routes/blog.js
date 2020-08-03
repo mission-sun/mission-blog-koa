@@ -1,36 +1,29 @@
 const router = require("koa-router")();
+const checkLogin = require('../middlerware/checkLogin')
 
 router.prefix("/api/blog");
 // let exec = require ('../db/mongo');
 let exec = require('../db/mongose');
 
 const {SuccessModel, ErrorModel,}  = require("../model/resModel");
-
-router.get("/list", async function (ctx, next) {
+// checkLogin ,
+router.get("/list",  checkLogin,  async function (ctx, next) {
   // const query = ctx.query;
   // if (ctx.session.viewCount == null) {
   //   ctx.session.viewCount = 0;
   // }else {
   //   ctx.session.viewCount ++;
   // }
+
+  // console.log('viewCount', ctx.session)
   // exec
-
-  // const getData = async () => {
-  //   let data = await exec();
-  //   console.log('data', data);
-  //   ctx.body = {};
+  // ctx.body  = {
+  //   session:  ctx.session.viewCount
   // }
-  // await exec().then(res => {
-  //   console.log('res.....', res);
-  //   ctx.body = res;
-  // })
 
-  // await exec.find( function(err, docs){
-  //   console.log('docs1212', docs);
-  //   ctx.body = {};
-  // })
-
+ 
   await exec.find().then(res => {
+    console.log('list')
     ctx.body = new SuccessModel(res);
   }).catch(err => {
     ctx.body = new ErrorModel(err);

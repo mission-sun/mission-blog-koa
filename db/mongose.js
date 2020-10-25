@@ -11,26 +11,51 @@ const env = process.env.NODE_ENV;
 console.log("env....", env, process.env.NODE_ENV);
 
 //2.连接数据库
-mongoose.connect(dbSetting.url + dbSetting.dbName, { useNewUrlParser: true }, function(err) {
+mongoose.connect(dbSetting.url, { useNewUrlParser: true }, function(err) {
     if (err) {
         console.log("连接数据库失败");
         return;
     }
     console.log("连接数据库成功", dbSetting.url + dbSetting.dbName);
+  // let oneBlog = new blogModel({ 
+  //     title: 'title',
+  //     content: 'String',
+  //     time: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()
+  // });
+  // console.log('oneBlog', oneBlog);
+  // oneBlog.save(function(err) {
+  //   if (err) {
+  //       console.log("err", err);
+  //   } else {
+  //       console.log("saved");
+  //   }
+  // });
+
 });
-//3.创建一个schema，规定集合内数据的结构和类型，创建规则，规则中不设置，不能插入成功；
+
+
 let blogSchema = new mongoose.Schema({
-    title: String,
-    content: String,
-    time: String,
+  title: String,
+  content: String,
+  time: String,
 });
+
+// 表格名称，会自动的在数据库中创建 blogmodels 的表格
+let blogModel = mongoose.model('blogModel', blogSchema);
+
+//3.创建一个schema，规定集合内数据的结构和类型，创建规则，规则中不设置，不能插入成功；
+// let blogSchema = new mongoose.Schema({
+//     title: String,
+//     content: String,
+//     time: String,
+// });
 // 创建用户表格
 let userSchema = new mongoose.Schema({
     user: String,
     password: String,
 });
 console.log("tableName", dbSetting.tableName);
-let blogData = mongoose.model(dbSetting.tableName, blogSchema);
+// let blogData = mongoose.model(dbSetting.tableName, blogSchema);
 
 let userInfo = mongoose.model(dbSetting.userTable, userSchema);
 
@@ -96,17 +121,31 @@ module.exports = {
         return promise;
     },
     find: function() {
-        const promise = new Promise((reslove, reject) => {
-            blogData.find({}, (err, docs) => {
+       const promise = new Promise((reslove, reject) => {
+        blogModel.find({}, (err, docs) => {
                 if (err) {
                     console.log('err', err);
                     reject(err);
                     return;
                 }
+                console.log('docs', docs);
                 reslove(docs);
             });
         });
         return promise;
+
+
+        // const promise = new Promise((reslove, reject) => {
+        //     blogData.find({}, (err, docs) => {
+        //         if (err) {
+        //             console.log('err', err);
+        //             reject(err);
+        //             return;
+        //         }
+        //         reslove(docs);
+        //     });
+        // });
+        // return promise;
     },
 
     deleteOne: function(params) {

@@ -7,7 +7,9 @@ let exec = require('../db/mongose');
 
 const {SuccessModel, ErrorModel,}  = require("../model/resModel");
 // checkLogin ,
-router.get("/list",  checkLogin,  async function (ctx, next) {
+// router.get("/list",  checkLogin,  async function (ctx, next) {
+
+router.get("/list", async function (ctx, next) {
   // const query = ctx.query;
   // if (ctx.session.viewCount == null) {
   //   ctx.session.viewCount = 0;
@@ -23,7 +25,6 @@ router.get("/list",  checkLogin,  async function (ctx, next) {
 
  
   await exec.find().then(res => {
-    console.log('list')
     ctx.body = new SuccessModel(res);
   }).catch(err => {
     ctx.body = new ErrorModel(err);

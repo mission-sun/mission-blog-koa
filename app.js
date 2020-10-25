@@ -19,13 +19,9 @@ const users = require("./routes/users");
 
 const blog = require("./routes/blog");
 
-
-
 global.USER_DATA = {};
-
 // error handler
 onerror(app);
-
 app.use(
   bodyparser({
     enableTypes: ["json", "form", "text"],
@@ -70,8 +66,6 @@ app.use(session({
     all: `${dbSetting.host}:${dbSetting.port}`
   })
 }));
-
-
 
 // routes
 app.use(index.routes(), index.allowedMethods());

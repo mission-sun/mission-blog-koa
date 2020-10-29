@@ -40,8 +40,39 @@ router.get("/list", async function (ctx, next) {
 });
 
 router.post("/create", async function (ctx, next) {
-  console.log('create', ctx.request.body);
   await exec.save(ctx.request.body).then(res => {
+    ctx.body = new SuccessModel(res);
+  }).catch(err => {
+    ctx.body = new ErrorModel(err);
+  }) 
+})
+
+router.get("/detail", async function (ctx, next) {
+  let currentCookie = ctx.cookies.get('root-mission');
+  if (currentCookie === 'lovesmx') {
+    console.log('userid', currentCookie);
+  }
+  await exec.findOne(ctx.query).then(res => {
+    ctx.body = new SuccessModel(res);
+  }).catch(err => {
+    ctx.body = new ErrorModel(err);
+  }) 
+})
+
+
+// updateOne
+
+
+router.post("/updateOne", async function (ctx, next) {
+  console.log('update', ctx.request.body);
+  let filter = {
+    _id: ctx.request.body.id
+  };
+  let data = {
+    ...ctx.request.body,
+    
+  }
+  await exec.updateOne(filter, data).then(res => {
     ctx.body = new SuccessModel(res);
   }).catch(err => {
     ctx.body = new ErrorModel(err);

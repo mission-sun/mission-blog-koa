@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 const dbSetting = require("../conf/db");
 
 const env = process.env.NODE_ENV;
-console.log("env....", env, process.env.NODE_ENV);
+console.log("env....", env);
 
 //2.连接数据库
 mongoose.connect(dbSetting.url, { useNewUrlParser: true }, function(err) {
@@ -33,22 +33,23 @@ mongoose.connect(dbSetting.url, { useNewUrlParser: true }, function(err) {
 
 });
 
-
 let blogSchema = new mongoose.Schema({
   title: String,
   content: String,
   time: String,
+  image: String
 });
-
 // 表格名称，会自动的在数据库中创建 blogmodels 的表格
 let blogModel = mongoose.model('blogModel', blogSchema);
 
-//3.创建一个schema，规定集合内数据的结构和类型，创建规则，规则中不设置，不能插入成功；
-// let blogSchema = new mongoose.Schema({
-//     title: String,
-//     content: String,
-//     time: String,
-// });
+let messageSchema = new mongoose.Schema({
+    name: String,
+    content: String,
+    time: String,
+});
+let messageModel = mongoose.model('messageModel', messageSchema);
+
+
 // 创建用户表格
 let userSchema = new mongoose.Schema({
     user: String,
@@ -59,36 +60,14 @@ console.log("tableName", dbSetting.tableName);
 
 let userInfo = mongoose.model(dbSetting.userTable, userSchema);
 
-// 目前手动写博客
-// var user = new userInfo({
-//     user: "sun",
-//     password: 123,
-// });
-// user.save(function(err) {
-//     if (err) {
-//         console.log("err", err);
-//     } else {
-//         console.log("saved");
-//     }
-// });
-
-// blogData.find({}, (err, docs) => {
-//   console.log('docs', docs)
-// })
-
-//  mgo.findOne(function (err,docs) {
-//   console.log('docs....', docs);
-// });
-
 //  数据库的增删改查，直接使用mongose
 module.exports = {
-    addUser: () => {},
-    // 增加
-    save: (params) => {
+    messageSave: () => {
         const promise = new Promise((reslove, reject) => {
-            oneblog = new blogData({
+            oneblog = new blogModel({
                 title: params.title,
                 content: params.content,
+                image: params.image,
                 time: new Date().toLocaleDateString() +
                     " " +
                     new Date().toLocaleTimeString(),
@@ -104,9 +83,78 @@ module.exports = {
         });
         return promise;
     },
+    // 增加
+    save: (params) => {
+        const promise = new Promise((reslove, reject) => {
+            oneblog = new blogModel({
+                title: params.title,
+                content: params.content,
+                image: params.image,
+                time: new Date().toLocaleDateString() +
+                    " " +
+                    new Date().toLocaleTimeString(),
+            });
+            oneblog.save((err) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                console.log("saved");
+                reslove();
+            });
+        });
+        return promise;
+    },
+    find: (params) => {
+        const promise = new Promise((reslove, reject) => {
+            blogModel.find({}).sort({time: -1}).exec((err, docs) => {
+                if (err) {
+                    console.log('err', err);
+                    reject(err);
+                    return;
+                }
+                reslove(docs);
+            })
+        })
+         return promise;
+     },
+    findOne: (params) => {
+        const promise = new Promise((reslove, reject) => {
+        blogModel.findOne( params , (err, docs) => {
+                 if (err) {
+                     console.log('err', err);
+                     reject(err);
+                     return;
+                 }
+                //  console.log('docs', docs);
+                 reslove(docs);
+             });
+         });
+         return promise;
+     },
+     updateOne: (filter, data) => {
+        data.time = new Date().toLocaleDateString() + " "+ new Date().toLocaleTimeString();
+        const promise = new Promise((reslove, reject) => {
+        blogModel.updateOne( filter, data,  (err, docs) => {
+                 if (err) {
+                     console.log('err', err);
+                     reject(err);
+                     return;
+                 }
+                //  console.log('docs', docs);
+                 reslove(docs);
+             });
+         });
+         return promise;
+     },
+     // 更新数据
+    // updateOne: function(filter, updatejson, callback) {
+    //     mgo.updateOne(filter, updatejson, function(err, doc) {
+    //         callback(err, doc);
+    //     });
+    // },
     //4.查
     findUser: function(data) {
-        // await MyModel.find({ name: 'john', age: { $gte: 18 } }).exec();
         const promise = new Promise((reslove, reject) => {
             let params = data || {};
             console.log('params-data', params);
@@ -119,33 +167,6 @@ module.exports = {
             });
         });
         return promise;
-    },
-    find: function() {
-       const promise = new Promise((reslove, reject) => {
-        blogModel.find({}, (err, docs) => {
-                if (err) {
-                    console.log('err', err);
-                    reject(err);
-                    return;
-                }
-                console.log('docs', docs);
-                reslove(docs);
-            });
-        });
-        return promise;
-
-
-        // const promise = new Promise((reslove, reject) => {
-        //     blogData.find({}, (err, docs) => {
-        //         if (err) {
-        //             console.log('err', err);
-        //             reject(err);
-        //             return;
-        //         }
-        //         reslove(docs);
-        //     });
-        // });
-        // return promise;
     },
 
     deleteOne: function(params) {
@@ -174,13 +195,6 @@ module.exports = {
     //2）删除满足条件的所有数据：
     deleteMany: function(filter, callback) {
         mgo.deleteMany(filter, function(err, doc) {
-            callback(err, doc);
-        });
-    },
-    //3.改
-    //1）修改满足条件的一条数据：
-    updateOne: function(filter, updatejson, callback) {
-        mgo.updateOne(filter, updatejson, function(err, doc) {
             callback(err, doc);
         });
     },

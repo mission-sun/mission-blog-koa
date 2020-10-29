@@ -20,7 +20,7 @@ module.exports = {
   deploy : {
     production : {
       user : 'root-mission',
-      host : '49.234.222.116',
+      host : '154.8.204.98',
       ref  : 'origin/master',
       repo : 'https://github.com/mission-sun/mission-blog-koa.git',
       path : '/home/root-mission/blog/serve',

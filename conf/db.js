@@ -5,8 +5,9 @@ let dbSetting
 
 if (env == 'development') {
     dbSetting = {
-        url: "mongodb://127.0.0.1:27017/new-db-one",
-        // url: `mongodb://${dbUser}:${dbPwd}@49.234.222.116:27017/`,
+        // url: "mongodb://127.0.0.1:27017/new-db-one",
+        url: `mongodb://${dbUser}:${dbPwd}@127.0.0.1:27017/new-db-one`,
+        // url: `mongodb://${dbUser}:${dbPwd}@154.8.204.98:27017/dbtest`,
         tableName: 'table-one',
         dbName: 'new-db-one',
         userTable: 'usertable',
@@ -14,7 +15,17 @@ if (env == 'development') {
         port: 6379
     }
 }
-
+if (env == 'production') {
+    dbSetting = {
+        // url: "mongodb://127.0.0.1:27017/new-db-one",
+        url: `mongodb://${dbUser}:${dbPwd}@154.8.204.98:27017/dbtest`,
+        tableName: 'table-one',
+        dbName: 'new-db-one',
+        userTable: 'usertable',
+        host: '127.0.0.1',
+        port: 6379
+    }
+}
 
 // if (env == 'development') {
 //     dbSetting = {

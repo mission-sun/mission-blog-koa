@@ -39,13 +39,16 @@ let blogSchema = new mongoose.Schema({
   time: String,
   image: String
 });
+
+
+
 // 表格名称，会自动的在数据库中创建 blogmodels 的表格
 let blogModel = mongoose.model('blogModel', blogSchema);
 
 let messageSchema = new mongoose.Schema({
     name: String,
-    content: String,
-    time: String,
+    message: String,
+    time: String
 });
 let messageModel = mongoose.model('messageModel', messageSchema);
 
@@ -62,17 +65,14 @@ let userInfo = mongoose.model(dbSetting.userTable, userSchema);
 
 //  数据库的增删改查，直接使用mongose
 module.exports = {
-    messageSave: () => {
+    messageSave: (params) => {
         const promise = new Promise((reslove, reject) => {
-            oneblog = new blogModel({
-                title: params.title,
-                content: params.content,
-                image: params.image,
-                time: new Date().toLocaleDateString() +
-                    " " +
-                    new Date().toLocaleTimeString(),
+            oneMessage = new messageModel({
+                name: params.name,
+                message: params.message,
+                time: params.time
             });
-            oneblog.save((err) => {
+            oneMessage.save((err) => {
                 if (err) {
                     reject(err);
                     return;
@@ -83,6 +83,47 @@ module.exports = {
         });
         return promise;
     },
+    getmessage: () => {
+        const promise = new Promise((reslove, reject) => {
+            messageModel.find({}).sort({time: -1}).exec((err, docs) => {
+                if (err) {
+                    console.log('err', err);
+                    reject(err);
+                    return;
+                }
+                let nowTime = new Date().getTime();
+               
+                const getTime = (time) => {
+                    let oneMin = 60*1000;
+                    let oneHour = 60*60*1000;
+                    let oneDay = 24*60*60*1000;
+                    let oneMon = 30*24*60*60*1000;
+                    if (time < oneMin) {
+                        return '刚刚';
+                    };
+                    if (time > oneMin && time < oneHour) {
+                        return `${Math.ceil(time/oneMin)}分钟前`;
+                    };
+                    if (time > oneHour && time < oneDay) {
+                        return `${Math.ceil(time/oneHour)}小时前`;
+                    };
+                    if (time > oneDay && time < oneMon) {
+                        return `${Math.ceil(time/oneDay)}天前`;
+                    };
+                    if (time > oneMon) {
+                        return `${Math.ceil(time/oneMon)}月前`;
+                    };
+                }
+                docs = docs.map( item => {
+                    item.time = getTime(nowTime -item.time);
+                    return item;
+                })
+                console.log('docs', docs);
+                reslove(docs);
+            })
+        })
+        return promise;
+     },
     // 增加
     save: (params) => {
         const promise = new Promise((reslove, reject) => {

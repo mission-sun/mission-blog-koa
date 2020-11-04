@@ -16,8 +16,9 @@ const dbSetting = require('./conf/db');
 
 const index = require("./routes/index");
 const users = require("./routes/users");
-
 const blog = require("./routes/blog");
+const message = require("./routes/message");
+
 
 global.USER_DATA = {};
 // error handler
@@ -71,6 +72,7 @@ app.use(session({
 app.use(index.routes(), index.allowedMethods());
 app.use(users.routes(), users.allowedMethods());
 app.use(blog.routes(), blog.allowedMethods());
+app.use(message.routes(), message.allowedMethods());
 
 // error-handling
 app.on("error", (err, ctx) => {

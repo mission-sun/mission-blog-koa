@@ -18,7 +18,7 @@ if (env == 'development') {
 if (env == 'production') {
     dbSetting = {
         // url: "mongodb://127.0.0.1:27017/new-db-one",
-        url: `mongodb://${dbUser}:${dbPwd}@154.8.204.98:27017/dbtest`,
+        url: `mongodb://${dbUser}:${dbPwd}@127.0.0.1:27017/dbtest`,
         tableName: 'table-one',
         dbName: 'new-db-one',
         userTable: 'usertable',

@@ -10,6 +10,26 @@ const {SuccessModel, ErrorModel,}  = require("../model/resModel");
 // router.get("/list",  checkLogin,  async function (ctx, next) {
 
 router.get("/list", async function (ctx, next) {
+  // 注意只有静态资源可以请求做缓存了，接口没有缓存这一说
+  // ctx.request.header = cache-control
+  // ctx.set('Cache-Control', 'max-age=3');
+  // ctx.set('Expires', `'${new Date()}'`);
+  // if (ctx.get('if-modified-since')) {
+  //   // stat.ctime.toGMTString 可以读取文件的修改时间
+  //   console.log('if-modified-since', ctx.get('if-modified-since'), ctx.get('Last-Modified'))
+  // }
+  // let newTime = new Date().getTime();
+  // ctx.set({
+  //   'Cache-Control': 'no-cache',
+  //   'Last-Modified': newTime
+  // })  
+  // let cache = {
+  //   maxAge: 600000,
+  //   expires: false,
+  //   cacheContrl: true,
+  //   lastModified: false,
+  //   eTag: false,
+  // }
   // const query = ctx.query;
   // if (ctx.session.viewCount == null) {
   //   ctx.session.viewCount = 0;

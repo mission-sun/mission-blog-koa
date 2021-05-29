@@ -34,6 +34,7 @@ app.use(
     console.log(Moment().format("YYYY-MM-DD HH:mm:ss"));
   })
 );
+// 是在/public 文件下搭建了一个静态服务 直接通过域名 /images/123.png 即可访问
 app.use(require("koa-static")(__dirname + "/public"));
 
 app.use(

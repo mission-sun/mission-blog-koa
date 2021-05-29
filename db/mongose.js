@@ -35,6 +35,7 @@ mongoose.connect(dbSetting.url, { useNewUrlParser: true }, function(err) {
 
 let blogSchema = new mongoose.Schema({
   title: String,
+  description: String,
   content: String,
   time: String,
   image: String
@@ -129,6 +130,7 @@ module.exports = {
         const promise = new Promise((reslove, reject) => {
             oneblog = new blogModel({
                 title: params.title,
+                description: params.description,
                 content: params.content,
                 image: params.image,
                 time: new Date().toLocaleDateString() +
@@ -212,7 +214,7 @@ module.exports = {
 
     deleteOne: function(params) {
         const promise = new Promise((reslove, reject) => {
-            blogData.remove(params, (err, docs) => {
+            blogModel.remove(params, (err, docs) => {
                 if (err) {
                     console.log("err-delete", err);
                     reject(err);

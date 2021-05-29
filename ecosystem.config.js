@@ -22,7 +22,7 @@ module.exports = {
       user : 'root-mission',
       host : '154.8.204.98',
       ref  : 'origin/master',
-      repo : 'https://github.com/mission-sun/mission-blog-koa.git',
+      repo : 'git@github.com:mission-sun/mission-blog-koa.git',
       path : '/home/root-mission/blog/serve',
       'pre-deploy': "git fetch",
       'post-deploy' : 'npm install --registry=https://registry.npm.taobao.org && pm2 reload ecosystem.config.js --env production'
